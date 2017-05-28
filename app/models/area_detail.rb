@@ -15,4 +15,5 @@ class AreaDetail
 	field :phone_number, type: String
 	# Phone Number - PhoneNumber(AreaDetail)
 	field :email, type: String
+
 end

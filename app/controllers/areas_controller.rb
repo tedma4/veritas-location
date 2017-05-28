@@ -2,72 +2,59 @@ class AreasController < ApplicationController
 	before_action :set_area, only: [:update, :delete, :show, :feed, :edit]
 
 	def new
-		if signed_in?
-			@area = Area.new
-			@areas = Area.where(:level.nin => ["L0"]).map { |area| 
-				map = { 
-					coords: area.area_profile[:coordinates][0].map {|points| {lat: points.last, lng: points.first} }, 
-					level: area.level,
-					title: area.title,
-					id: area.id.to_s
-			  }
-			  map[:attachment] = area.attachment.url if area.attachment
-			  map
-			}
+		@area = Area.new
+		@areas = Area.where(:level.nin => ["L0"]).map { |area| 
+			map = { 
+				coords: area.area_profile[:coordinates][0].map {|points| {lat: points.last, lng: points.first} }, 
+				level: area.level,
+				title: area.title,
+				id: area.id.to_s
+		  }
+		  map[:attachment] = area.attachment.url if area.attachment
+		  map
+		}
 
-			respond_to do |format|
-				format.html
-				format.js
-			end
-		else
-			redirect_to "/"
+		respond_to do |format|
+			format.js
 		end
 	end
 
 	def feed
-		if signed_in?
-			@area = Area.includes(:area_watchers, {area_watchers: :user}).find(params[:id])
-			if ["L1", "L0"].include? @area.level 
-				@inner_areas = Area.where(
-		      area_profile: {
-		        "$geoWithin" => {
-		          "$geometry"=> {
-		            type: "Polygon",
-		            coordinates: @area.area_profile[:coordinates]
-		      }}},
-		      :id.nin => [@area.id]
-		    )
-			elsif @area.level == "L2"
-				@outer_areas = Area.where(
-		      area_profile: {
-		        "$geoIntersects" => {
-		          "$geometry"=> {
-		            type: "Polygon",
-		            coordinates: @area.area_profile[:coordinates]
-		      }}},
-		      :id.nin => [@area.id]
-		    )
-			end
-		else
-			redirect_to "/"
+		@area = Area.includes(:area_watchers, {area_watchers: :user}).find(params[:id])
+		if ["L1", "L0"].include? @area.level 
+			@inner_areas = Area.where(
+	      area_profile: {
+	        "$geoWithin" => {
+	          "$geometry"=> {
+	            type: "Polygon",
+	            coordinates: @area.area_profile[:coordinates]
+	      }}},
+	      :id.nin => [@area.id]
+	    )
+		elsif @area.level == "L2"
+			@outer_areas = Area.where(
+	      area_profile: {
+	        "$geoIntersects" => {
+	          "$geometry"=> {
+	            type: "Polygon",
+	            coordinates: @area.area_profile[:coordinates]
+	      }}},
+	      :id.nin => [@area.id]
+	    )
 		end
 	end
 
 	def show
-		if signed_in?
-			locs = UserLocation.where(:"coords" => {"$geoIntersects" => { "$geometry" => @area.area_profile } })
-			@polygon = @area.to_a.map { |area| 
-				{ 
-					coords: area.area_profile[:coordinates][0].map {|points| {lat: points.last, lng: points.first} }, 
-					level: area.level,
-					title: area.title,
-					id: area.id,
-			  }
-			}.first
-			@dots = locs.pluck(:coords).map {|l| {position: {lat: l[1], lng: l[0]}, type: "user"} }
-		else
-			redirect_to "/"
-		end
+		locs = UserLocation.where(:"coords" => {"$geoIntersects" => { "$geometry" => @area.area_profile } })
+		@polygon = @area.to_a.map { |area| 
+			{ 
+				coords: area.area_profile[:coordinates][0].map {|points| {lat: points.last, lng: points.first} }, 
+				level: area.level,
+				title: area.title,
+				id: area.id,
+		  }
+		}.first
+		@dots = locs.pluck(:coords).map {|l| {position: {lat: l[1], lng: l[0]}, type: "user"} }
 	end
 
 	def create
@@ -103,19 +90,15 @@ class AreasController < ApplicationController
   end
 
   def index
-  	if signed_in?
-	  	areas = Area.pluck(:area_profile, :title, :level, :id)
-	  	@areas = areas.map {|area|
-	  		{
-	  			dot_count: UserLocation.where(:"coords" => {"$geoIntersects" => { "$geometry" => area[0] } }).count,
-	  			title: area[1],
-	  			level: area[2],
-	  			id: area[3]
-	  		}
-	  	}
-	  else
-	  	redirect_to "/"
-		end
+		areas = Area.pluck(:area_profile, :title, :level, :id)
+		@areas = areas.map {|area|
+			{
+				dot_count: UserLocation.where(:"coords" => {"$geoIntersects" => { "$geometry" => area[0] } }).count,
+				title: area[1],
+				level: area[2],
+				id: area[3]
+			}
+		}
   end
 
   def delete
