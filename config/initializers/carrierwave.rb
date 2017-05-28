@@ -5,7 +5,7 @@ CarrierWave.configure do |config|
 
   # Optionally define an asset host for configurations that are fronted by a
   # content host, such as CloudFront.
-  config.asset_host = "https://s3-us-west-1.amazonaws.com/#{ENV['S3_BUCKET_NAME']}"
+  config.asset_host = "https://s3-us-west-2.amazonaws.com/#{ENV['S3_BUCKET_NAME']}"
   # config.asset_host = 'http://localhost:3000'
 
   # The maximum period for authenticated_urls is only 7 days.
