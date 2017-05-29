@@ -23,7 +23,7 @@ gem 'mini_magick'
 gem 'jwt'
 gem 'mongoid', git: 'https://github.com/mongodb/mongoid.git'
 gem 'mongoid-geospatial', git: "https://github.com/tedma4/mongoid-geospatial", require: 'mongoid/geospatial'
-gem 'rgeo', '0.5.3'
+gem 'rgeo', '0.6.0'
 gem 'faker', '1.7.3'
 gem 'figaro'
 

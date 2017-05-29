@@ -159,7 +159,7 @@ GEM
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
     redis (3.3.3)
-    rgeo (0.5.3)
+    rgeo (0.6.0)
     slop (3.6.0)
     spring (2.0.1)
       activesupport (>= 4.2)
@@ -201,7 +201,7 @@ DEPENDENCIES
   rails (= 5.1.0)
   rails_12factor
   redis (~> 3.0)
-  rgeo (= 0.5.3)
+  rgeo (= 0.6.0)
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
