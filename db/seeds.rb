@@ -13,3 +13,8 @@ client[:areas].find.limit(100).each do |doc|
 	a.save
 end
 
+Area.where(area_profile: {"$geoIntersects" => {"$geometry"=> {type: "Point", coordinates: [-113.23375932076983, 35.48792710355195] }}}).first
+
+
+
+
