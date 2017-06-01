@@ -4,6 +4,6 @@ Rails.application.routes.draw do
   resources :area_watchers
   resources :area_details
 
-  get "user_location", to "area_watchers#user_location"
+  get "user_location", to: "area_watchers#user_location"
 
 end
