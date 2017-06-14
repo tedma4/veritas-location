@@ -24,7 +24,7 @@ class AreaWatcher
 
   # # ---------- Create and update Area Watcher ----------- Begin
   def self.watch_area(coords, current_user_id)
-    in_an_area = inside_an_area?(coords.coords)
+    in_an_area = AreaWatcher.inside_an_area?(coords.coords)
     watchers = AreaWatcher.where(user_id: current_user_id)
     if watchers.any? #
       update_or_create_area_watcher(in_an_area, watchers, coords)
@@ -161,7 +161,7 @@ class AreaWatcher
   end
 
   
-  def inside_an_area?(coords)
+  def self.inside_an_area?(coords)
    # coords = Mongoid::Geospatial::Point object
    if coords.is_a? Array
      area = Area.where(
