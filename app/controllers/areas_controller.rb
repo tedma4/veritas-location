@@ -51,7 +51,7 @@ class AreasController < ApplicationController
 				coords: area.area_profile[:coordinates][0].map {|points| {lat: points.last, lng: points.first} }, 
 				level: area.level,
 				title: area.title,
-				id: area.id,
+				id: area.id.to_s,
 		  }
 		}.first
 		@dots = locs.pluck(:coords).map {|l| {position: {lat: l[1], lng: l[0]}, type: "user"} }
@@ -96,9 +96,10 @@ class AreasController < ApplicationController
 				dot_count: UserLocation.where(:"coords" => {"$geoIntersects" => { "$geometry" => area[0] } }).count,
 				title: area[1],
 				level: area[2],
-				id: area[3]
+				id: area[3].to_s
 			}
 		}
+		render json: @areas
   end
 
   def delete

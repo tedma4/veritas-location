@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  # Veritas Location
   # include ActionController::ImplicitRender
   # respond_to :json
 
