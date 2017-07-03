@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :areas, only: [:show, :create, :update, :index, :destroy]
   resources :area_watchers
   resources :area_details
+  resources :user_locations, only: [:index]
 
   get "user_location", to: "area_watchers#user_location"
 

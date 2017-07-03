@@ -93,6 +93,7 @@ class AreasController < ApplicationController
 		areas = Area.pluck(:area_profile, :title, :level, :id)
 		@areas = areas.map {|area|
 			{
+				coords: area[0][:coordinates][0].map {|points| {lat: points.last, lng: points.first} }, 
 				dot_count: UserLocation.where(:"coords" => {"$geoIntersects" => { "$geometry" => area[0] } }).count,
 				title: area[1],
 				level: area[2],
