@@ -72,14 +72,13 @@ class AreasController < ApplicationController
 	end
 
 	def update
-			if @area.update(area_params)
-				## After an area is successfully saved add it to the corresponding 
-				## location details
-				# @area.update_other_things
-				render json: @area, notice: 'Area was successfully Updated.'
-			else
-				render json: @area.errors, status: :unprocessable_entity
-			end				
+		if @area.update(area_params)
+			## After an area is successfully saved add it to the corresponding 
+			## location details
+			# @area.update_other_things
+			render json: @area, notice: 'Area was successfully Updated.'
+		else
+			render json: @area.errors, status: :unprocessable_entity
 		end
   end
 
