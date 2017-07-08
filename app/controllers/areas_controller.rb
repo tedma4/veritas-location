@@ -13,10 +13,6 @@ class AreasController < ApplicationController
 		  map[:attachment] = area.attachment.url if area.attachment
 		  map
 		}
-
-		respond_to do |format|
-			format.js
-		end
 	end
 
 	def feed
@@ -60,16 +56,15 @@ class AreasController < ApplicationController
 	def create
 		@area = Area.new(area_params)
 		@area.area_detail = AreaDetail.new 
-		respond_to do |format|
-			if @area.save
-				## After an area is successfully saved add it to the corresponding 
-				## location details
-				# @area.create_other_things
-				format.json {render json: {status: 200}}
-			else
-				format.json {render json: @area.errors, status: :unprocessable_entity }
-			end				
-		end
+
+		if @area.save
+			## After an area is successfully saved add it to the corresponding 
+			## location details
+			# @area.create_other_things
+			render json: {status: 200}
+		else
+			render json: @area.errors, status: :unprocessable_entity
+		end				
 	end
 
 	def edit
@@ -77,14 +72,13 @@ class AreasController < ApplicationController
 	end
 
 	def update
-		respond_to do |format|
 			if @area.update(area_params)
 				## After an area is successfully saved add it to the corresponding 
 				## location details
 				# @area.update_other_things
-				format.html {redirect_to @area, notice: 'Area was successfully Updated.'}
+				render json: @area, notice: 'Area was successfully Updated.'
 			else
-				format.json {render json: @area.errors, status: :unprocessable_entity }
+				render json: @area.errors, status: :unprocessable_entity
 			end				
 		end
   end

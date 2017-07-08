@@ -60,9 +60,9 @@ class Area
       saved_hash[:coordinates] = [shape]
     else
       # if the area_profile is a rectangle
-      north = area_profile.first.split(",").map(&:to_f)
+      north = area_profile.first.class == String ? area_profile.first.split(",").map(&:to_f) : area_profile.first
       northWest = {lat: north.first, lng: north.last}
-      south = area_profile.last.split(",").map(&:to_f)
+      south = area_profile.last.class == String ? area_profile.last.split(",").map(&:to_f) : area_profile.last
       southEast = {lat: south.first, lng: south.last}
       northEast = {lat: northWest[:lat], lng: southEast[:lng] }
       southWest = {lat: southEast[:lat], lng: northWest[:lng] }
